@@ -50,5 +50,5 @@ jobs:
           SCRIPT_AFTER: | # 上传后的操作：安装依赖，迁移数据库
             cd ${{ env.TARGET_DIR }}${{ env.PROJECT_DIR }}
             npm i
-            npx prisma migrate dev --name migration
+            pnpm dlx prisma migrate dev --name migration
             pm2 reload all
