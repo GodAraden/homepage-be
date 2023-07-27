@@ -3,18 +3,19 @@ import { PrismaClient } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import { config as configEnv } from 'dotenv';
 
+// 格式 USERINFO=username:xxx#password:yyy
 const { parsed } = configEnv({
   path: '.env.local',
 });
 const userInfo: LoginDto | Record<string, never> = Object.fromEntries(
-  parsed.userinfo?.split(';').map((pairs) => pairs.split('=')) || [],
+  parsed.USERINFO?.split('#').map((pairs) => pairs.split(':')) || [],
 );
 
 @Injectable()
 export class AppService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
-  async create() {
+  async test() {
     const users = await this.prisma.test.findMany();
     if (users.length >= 50) {
       return { message: '容量已满', data: users };

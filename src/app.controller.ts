@@ -9,7 +9,7 @@ export class AppController {
 
   @Get()
   getID() {
-    return this.appService.create();
+    return this.appService.test();
   }
 
   @Post('login')
