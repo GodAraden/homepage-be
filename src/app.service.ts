@@ -3,12 +3,12 @@ import { PrismaClient } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import { config as configEnv } from 'dotenv';
 
-// 格式 USERINFO=username:xxx#password:yyy
+// 格式 USERINFO=username:xxx~password:yyy，用井号分割后面的会被当成注释/(ㄒoㄒ)/~~
 const { parsed } = configEnv({
   path: '.env.local',
 });
 const userInfo: LoginDto | Record<string, never> = Object.fromEntries(
-  parsed.USERINFO?.split('#').map((pairs) => pairs.split(':')) || [],
+  parsed.USERINFO?.split('~').map((pairs) => pairs.split(':')) || [],
 );
 
 @Injectable()
