@@ -14,6 +14,15 @@ dependencies:
   '@nestjs/platform-express':
     specifier: ^10.0.0
     version: registry.npmmirror.com/@nestjs/platform-express@10.0.0(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)
+  '@types/crypto-js':
+    specifier: ^4.1.1
+    version: registry.npmmirror.com/@types/crypto-js@4.1.1
+  crypto-js:
+    specifier: ^4.1.1
+    version: registry.npmmirror.com/crypto-js@4.1.1
+  dotenv:
+    specifier: ^16.3.1
+    version: registry.npmmirror.com/dotenv@16.3.1
   reflect-metadata:
     specifier: ^0.1.13
     version: registry.npmmirror.com/reflect-metadata@0.1.13
@@ -596,6 +605,12 @@ packages:
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node@20.3.1
     dev: true
+
+  registry.npmmirror.com/@types/crypto-js@4.1.1:
+    resolution: {integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/crypto-js/-/crypto-js-4.1.1.tgz}
+    name: '@types/crypto-js'
+    version: 4.1.1
+    dev: false
 
   registry.npmmirror.com/@types/eslint-scope@3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/eslint-scope/-/eslint-scope-3.7.4.tgz}
@@ -1635,6 +1650,12 @@ packages:
       which: registry.npmmirror.com/which@2.0.2
     dev: true
 
+  registry.npmmirror.com/crypto-js@4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/crypto-js/-/crypto-js-4.1.1.tgz}
+    name: crypto-js
+    version: 4.1.1
+    dev: false
+
   registry.npmmirror.com/debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/debug/-/debug-2.6.9.tgz}
     name: debug
@@ -1719,6 +1740,13 @@ packages:
     dependencies:
       esutils: registry.npmmirror.com/esutils@2.0.3
     dev: true
+
+  registry.npmmirror.com/dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dotenv/-/dotenv-16.3.1.tgz}
+    name: dotenv
+    version: 16.3.1
+    engines: {node: '>=12'}
+    dev: false
 
   registry.npmmirror.com/ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ee-first/-/ee-first-1.1.1.tgz}

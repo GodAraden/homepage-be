@@ -1,5 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { LoginDto } from './dto/login.dto';
+import { config as configEnv } from 'dotenv';
+
+const { parsed } = configEnv({
+  path: '.env.local',
+});
+const userInfo: LoginDto | Record<string, never> = Object.fromEntries(
+  parsed.userinfo?.split(';').map((pairs) => pairs.split('=')) || [],
+);
 
 @Injectable()
 export class AppService {
@@ -13,5 +22,14 @@ export class AppService {
       const user = await this.prisma.test.create({ data: {} });
       return user;
     }
+  }
+
+  login(data: LoginDto) {
+    if (data.username === userInfo.username) {
+      if (data.password === userInfo.password) {
+        return true;
+      }
+    }
+    throw new HttpException('LoginFailed', HttpStatus.BAD_REQUEST);
   }
 }

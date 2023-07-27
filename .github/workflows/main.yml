@@ -34,9 +34,10 @@ jobs:
       - name: deploy prepare # Github Action 虚拟机上的操作
         run: |
           mv dist ${{ env.PROJECT_DIR }}
-          cp -r prisma/ package.json .env ${{ env.PROJECT_DIR }}/
+          cp -r prisma/ package.json ${{ env.PROJECT_DIR }}/
           cd ${{ env.PROJECT_DIR }}
           echo ${{ secrets.DATABASE_ENV }} > .env
+          echo ${{ secrets.USERINFO_ENV }} > .env.local
 
       - name: deploy
         uses: easingthemes/ssh-deploy@main # 使用 ssh 上传文件的 action 操作
