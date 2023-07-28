@@ -14,11 +14,15 @@ export class AppController {
 
   @Post('login')
   login(
-    @Body(ValidationPipe) data: LoginDto,
+    @Body(ValidationPipe) loginDto: LoginDto,
     @Session() session: CustomSession,
   ) {
-    if (session.user) return session.user;
-    const isLogin = this.appService.login(data);
+    // 页面加载时会发送一个空的登录请求，通过 cookie 登陆方式
+    if (loginDto.username === void 0 && loginDto.password === void 0) {
+      if (session.user) return session.user;
+    }
+    // 如果有参数，通过参数中的账号密码登录
+    const isLogin = this.appService.login(loginDto);
     if (isLogin) session.user = { role: Role.admin };
     return session.user;
   }

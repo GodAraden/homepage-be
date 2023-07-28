@@ -25,9 +25,9 @@ export class AppService {
     }
   }
 
-  login(data: LoginDto) {
-    if (data.username === userInfo.username) {
-      if (data.password === userInfo.password) {
+  login(loginDto: LoginDto) {
+    if (loginDto.username === userInfo.username) {
+      if (loginDto.password === userInfo.password) {
         return true;
       }
     }

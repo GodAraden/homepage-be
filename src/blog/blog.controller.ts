@@ -15,7 +15,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { RolesGuard } from 'src/common/permission/roles.guard';
 import { Roles } from 'src/common/permission/roles.decorator';
 import { ValidationPipe } from 'src/common/validate.pipe';
-import { FormatDatePipe } from './common/format-date.pipe';
+import { FormatDatePipe } from './common/formatDate.pipe';
 import { FetchBlogDto } from './dto/fetch-blog.dto';
 
 @UseGuards(RolesGuard)

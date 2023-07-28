@@ -1,6 +1,7 @@
+import { Blog } from '@prisma/client';
 import { IsArray, IsString, IsDate, IsOptional } from 'class-validator';
 
-export class CreateBlogDto {
+export class CreateBlogDto implements Partial<Blog> {
   @IsString()
   title: string;
 

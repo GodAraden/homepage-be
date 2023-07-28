@@ -18,8 +18,10 @@ async function bootstrap() {
     session({
       secret: "Araden's Website",
       name: 'session',
-      rolling: true, // 在每次请求时强行设置 cookie，这将重置 cookie 过期时间(默认:false)
-      cookie: { maxAge: null }, // 以 cookie 形式保存在客户端的 session 票据的配置项
+      resave: false,
+      saveUninitialized: false,
+      rolling: true,
+      cookie: { maxAge: null },
     }),
   );
 
