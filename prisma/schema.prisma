@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,4 +9,46 @@ datasource db {
 
 model Test {
   id String @id @default(uuid())
+}
+
+model Tag {
+  id      Int    @id @default(autoincrement())
+  tagName String @unique
+  blogs   Blog[]
+}
+
+model Type {
+  id       Int    @id @default(autoincrement())
+  typeName String @unique
+  blogs    Blog[]
+}
+
+model Comment {
+  id       Int       @id @default(autoincrement())
+  avatar   String
+  email    String
+  name     String
+  date     DateTime
+  likeNum  Int       @default(0)
+  blog     Blog      @relation(fields: [blogId], references: [id])
+  blogId   String
+  parent   Comment?  @relation("reply", fields: [parentId], references: [id])
+  parentId Int?      @unique
+  comments Comment[] @relation("reply") // 评论的评论
+}
+
+model Blog {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  author      String
+  content     String    @db.Text
+  type        Type      @relation(fields: [typeName], references: [typeName])
+  typeName    String
+  tag         Tag[]
+  postAt      DateTime  @default(now())
+  updateAt    DateTime  @default(now())
+  readNum     Int       @default(0)
+  likeNum     Int       @default(0)
+  comments    Comment[]
 }

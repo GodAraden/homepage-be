@@ -11,7 +11,7 @@ export async function LoggerMiddleware(req: any, res: any, next: any) {
   用户信息: ${JSON.stringify(req.session.user)} \n
 `;
 
-  console.log('[Log Middleware] ', filename);
+  // console.log('[Log Middleware] ', filename);
 
   // await writeFile(`logs/${filename}`, info, { flag: 'a' });
 

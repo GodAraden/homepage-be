@@ -21,6 +21,9 @@ export class RolesGuard implements CanActivate {
     if (!role) {
       throw new HttpException('NotLogin', HttpStatus.BAD_REQUEST);
     }
-    return roles.includes(role);
+    if (!role.includes(role)) {
+      throw new HttpException('NoPermission', HttpStatus.FORBIDDEN);
+    }
+    return true;
   }
 }
