@@ -20,6 +20,7 @@ export class AppController {
     // 页面加载时会发送一个空的登录请求，通过 cookie 登陆方式
     if (loginDto.username === void 0 && loginDto.password === void 0) {
       if (session.user) return session.user;
+      else return 'SessionCheckFailed';
     }
     // 如果有参数，通过参数中的账号密码登录
     const isLogin = this.appService.login(loginDto);
