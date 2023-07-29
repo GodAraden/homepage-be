@@ -32,6 +32,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: ['http://araden.top'],
+    credentials: true,
   });
   await app.listen(3000);
 }
