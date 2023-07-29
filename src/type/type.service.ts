@@ -7,6 +7,10 @@ import { UpdateTypeDto } from './dto/update-type.dto';
 export class TypeService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
+  findAll() {
+    return this.prisma.type.findMany();
+  }
+
   create(createTypeDto: CreateTypeDto) {
     return this.prisma.type.create({
       data: createTypeDto,

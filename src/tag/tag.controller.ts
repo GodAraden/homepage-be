@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
@@ -18,6 +19,11 @@ import { ValidationPipe } from 'src/common/validate.pipe';
 @Controller('tag')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
+
+  @Get()
+  findAll() {
+    return this.tagService.findAll();
+  }
 
   @Post()
   @Roles(Role.admin)

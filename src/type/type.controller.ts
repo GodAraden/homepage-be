@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { TypeService } from './type.service';
 import { CreateTypeDto } from './dto/create-type.dto';
@@ -18,6 +19,10 @@ import { ValidationPipe } from 'src/common/validate.pipe';
 @Controller('type')
 export class TypeController {
   constructor(private readonly typeService: TypeService) {}
+  @Get()
+  findAll() {
+    return this.typeService.findAll();
+  }
 
   @Post()
   @Roles(Role.admin)

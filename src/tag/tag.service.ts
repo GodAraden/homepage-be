@@ -7,6 +7,10 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 export class TagService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
+  findAll() {
+    return this.prisma.tag.findMany();
+  }
+
   create(createTagDto: CreateTagDto) {
     return this.prisma.tag.create({
       data: createTagDto,
