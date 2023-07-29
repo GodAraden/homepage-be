@@ -40,7 +40,7 @@ model Comment {
 model Blog {
   id          String    @id @default(uuid())
   title       String
-  description String
+  description String    @db.Text
   author      String
   content     String    @db.Text
   type        Type      @relation(fields: [typeName], references: [typeName])
