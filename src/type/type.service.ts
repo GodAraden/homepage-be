@@ -8,7 +8,13 @@ export class TypeService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
   findAll() {
-    return this.prisma.type.findMany();
+    return this.prisma.type.findMany({
+      select: {
+        _count: true,
+        typeName: true,
+        id: true,
+      },
+    });
   }
 
   create(createTypeDto: CreateTypeDto) {
