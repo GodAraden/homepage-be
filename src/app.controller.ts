@@ -8,8 +8,13 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getID() {
-    return this.appService.test();
+  getAppInfo() {
+    return {
+      name: "GodAraden's Homepage-Backend",
+      version: '1.0.0',
+      description:
+        "Ahh,,, this is the server's domain, You can goto http://araden.top/ and visit my homepage",
+    };
   }
 
   @Post('login')

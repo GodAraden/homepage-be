@@ -1,5 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { config as configEnv } from 'dotenv';
 
@@ -13,18 +12,6 @@ const userInfo: LoginDto | Record<string, never> = Object.fromEntries(
 
 @Injectable()
 export class AppService {
-  @Inject('PrismaClient') private prisma: PrismaClient;
-
-  async test() {
-    const users = await this.prisma.test.findMany();
-    if (users.length >= 50) {
-      return { message: '容量已满', data: users };
-    } else {
-      const user = await this.prisma.test.create({ data: {} });
-      return user;
-    }
-  }
-
   login(loginDto: LoginDto) {
     if (loginDto.username === userInfo.username) {
       if (loginDto.password === userInfo.password) {
