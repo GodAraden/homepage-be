@@ -94,8 +94,18 @@ export class BlogService {
     return this.prisma.blog.update({
       where: { id },
       data: { readNum: { increment: 1 } },
-      include: {
+      select: {
+        _count: { select: { comments: true } },
+        id: true,
+        title: true,
+        content: true,
+        author: true,
+        typeName: true,
         tag: true,
+        postAt: true,
+        updateAt: true,
+        readNum: true,
+        likeNum: true,
       },
     });
   }
