@@ -45,7 +45,7 @@ export class BlogService {
     // 查询参数
     const query = {
       typeName: fetchBlogDto.typeName,
-      tag: fetchBlogDto.tags
+      tags: fetchBlogDto.tags
         ? { some: { tagName: { in: fetchBlogDto.tags } } }
         : undefined,
       OR: fetchBlogDto.keyword
