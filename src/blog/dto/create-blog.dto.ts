@@ -15,7 +15,7 @@ export class CreateBlogDto implements Partial<Blog> {
   content: string;
 
   @IsString()
-  type: string;
+  typeName: string;
 
   @IsArray()
   tags: string[];

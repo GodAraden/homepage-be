@@ -41,7 +41,7 @@ model Blog {
   content     String    @db.Text
   type        Type      @relation(fields: [typeName], references: [typeName])
   typeName    String
-  tag         Tag[]
+  tags        Tag[]
   postAt      DateTime  @default(now())
   updateAt    DateTime  @default(now())
   readNum     Int       @default(0)

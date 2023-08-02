@@ -8,8 +8,9 @@ import { FetchBlogDto } from './dto/fetch-blog.dto';
 export class BlogService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
+  // 创建博客，并 关联或创建 现有的 分类或标签
   create(createBlogDto: CreateBlogDto) {
-    const { type: typeName, tags, ...data } = createBlogDto;
+    const { typeName, tags, ...data } = createBlogDto;
     return this.prisma.blog.create({
       data: {
         type: {
@@ -18,7 +19,7 @@ export class BlogService {
             create: { typeName },
           },
         },
-        tag: {
+        tags: {
           connectOrCreate: tags.map((tagName) => ({
             where: { tagName },
             create: { tagName },
@@ -27,20 +28,23 @@ export class BlogService {
         ...data,
       },
       include: {
-        tag: true,
+        tags: true,
       },
     });
   }
 
+  // 根据传入参数获取博客列表
   async findList(fetchBlogDto: FetchBlogDto) {
+    // 设置默认排序方式
     if (!['readNum', 'likeNum', 'postAt'].includes(fetchBlogDto.orderBy)) {
       fetchBlogDto.orderBy = 'postAt';
     }
     if (!['asc', 'desc'].includes(fetchBlogDto.order)) {
       fetchBlogDto.order = 'desc';
     }
+    // 查询参数
     const query = {
-      typeName: fetchBlogDto.type,
+      typeName: fetchBlogDto.typeName,
       tag: fetchBlogDto.tags
         ? { some: { tagName: { in: fetchBlogDto.tags } } }
         : undefined,
@@ -55,9 +59,11 @@ export class BlogService {
         { postAt: { gte: fetchBlogDto.startDate } },
       ],
     };
+    // 该查询条件下的博客总数，用于分页
     const total = await this.prisma.blog.count({
       where: query,
     });
+    // 查询语句，会筛掉 content
     const data = await this.prisma.blog.findMany({
       where: query,
       orderBy: { [fetchBlogDto.orderBy]: fetchBlogDto.order },
@@ -68,7 +74,7 @@ export class BlogService {
         description: true,
         author: true,
         typeName: true,
-        tag: true,
+        tags: true,
         postAt: true,
         updateAt: true,
         readNum: true,
@@ -98,10 +104,11 @@ export class BlogService {
         _count: { select: { comments: true } },
         id: true,
         title: true,
+        description: true,
         content: true,
         author: true,
         typeName: true,
-        tag: true,
+        tags: true,
         postAt: true,
         updateAt: true,
         readNum: true,
@@ -112,7 +119,7 @@ export class BlogService {
 
   update(id: string, updateBlogDto: UpdateBlogDto) {
     const {
-      type: typeName,
+      typeName,
       deleteTags = [],
       createTags = [],
       updatedAt,
@@ -129,7 +136,7 @@ export class BlogService {
               },
             }
           : void 0,
-        tag: {
+        tags: {
           connectOrCreate: createTags.map((tagName) => ({
             where: { tagName },
             create: { tagName },
@@ -142,7 +149,7 @@ export class BlogService {
         ...data,
       },
       include: {
-        tag: true,
+        tags: true,
       },
     });
   }
@@ -151,7 +158,7 @@ export class BlogService {
     return this.prisma.blog.delete({
       where: { id },
       include: {
-        tag: true,
+        tags: true,
       },
     });
   }

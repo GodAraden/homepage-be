@@ -15,7 +15,7 @@ export class FetchBlogDto {
 
   @IsString()
   @IsOptional()
-  type: string;
+  typeName: string;
 
   @IsArray()
   @IsOptional()

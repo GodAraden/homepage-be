@@ -20,7 +20,7 @@ export class UpdateBlogDto implements Partial<Blog> {
 
   @IsString()
   @IsOptional()
-  type: string;
+  typeName: string;
 
   @IsArray()
   @IsOptional()
