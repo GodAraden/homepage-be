@@ -48,6 +48,11 @@ jobs:
           SOURCE: '${{ env.PROJECT_DIR }}' # 要进行上传的文件目录
           TARGET: ${{ env.TARGET_DIR }} # 要进行部署的生产环境目录
           ARGS: '-rltgoDzvO'
+          SCRIPT_BEFORE: |
+            cd ${{ env.TARGET_DIR }}
+            chattr -i ${{ env.PROJECT_DIR }}/.user.ini
+            chmod -R 777 ${{ env.PROJECT_DIR }}/
+            rm -rf ${{ env.PROJECT_DIR }}
           SCRIPT_AFTER: | # 上传后的操作：安装依赖，迁移数据库
             cd ${{ env.TARGET_DIR }}${{ env.PROJECT_DIR }}
             npm i
