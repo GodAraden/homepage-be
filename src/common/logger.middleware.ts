@@ -3,7 +3,9 @@
 // const prisma = new PrismaClient();
 
 export async function LoggerMiddleware(req: any, res: any, next: any) {
-  const filename = `${new Date().toLocaleDateString().replace(/\//g, '-')}.log`;
+  const filename = `${new Date()
+    .toLocaleDateString('zh-CN')
+    .replace(/\//g, '-')}.log`;
 
   const info = `${new Date().toLocaleTimeString()} / ${req.method} : ${
     req.originalUrl

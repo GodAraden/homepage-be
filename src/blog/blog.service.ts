@@ -111,11 +111,11 @@ export class BlogService {
      * 2. 后面普通用户访问此接口，发现有 Cache 直接返回（几 ms 的响应时间）
      * 3. 我（Admin）访问此接口，正常查询，更新 Cache
      */
-    const today = getStartOfDay(0).toLocaleDateString();
+    const today = getStartOfDay(0).toLocaleDateString('zh-CN');
     if (role !== Role.admin && this.statCache.has(today)) {
       return this.statCache.get(today);
     }
-    this.statCache.delete(getStartOfDay(1).toLocaleDateString());
+    this.statCache.delete(getStartOfDay(1).toLocaleDateString('zh-CN'));
 
     // 获取每个分类下博客发布情况
     const typeRes = await this.typeService.findAll();
@@ -137,7 +137,7 @@ export class BlogService {
       postGroupByMonth.push(
         this.prisma.blog.count({ where: { postAt: { gte: begin, lte: end } } }),
       );
-      monthXAxis.push(begin.toLocaleDateString());
+      monthXAxis.push(begin.toLocaleDateString('zh-CN'));
     }
     const monthValue = await Promise.all(postGroupByMonth);
 
@@ -151,7 +151,7 @@ export class BlogService {
           const count = await this.prisma.blog.count({
             where: { postAt: { gte: begin, lte: end } },
           });
-          resolve([begin.toLocaleDateString(), count]);
+          resolve([begin.toLocaleDateString('zh-CN'), count]);
         }),
       );
     }
