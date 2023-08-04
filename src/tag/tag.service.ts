@@ -8,7 +8,13 @@ export class TagService {
   @Inject('PrismaClient') private prisma: PrismaClient;
 
   findAll() {
-    return this.prisma.tag.findMany();
+    return this.prisma.tag.findMany({
+      select: {
+        _count: true,
+        tagName: true,
+        id: true,
+      },
+    });
   }
 
   create(createTagDto: CreateTagDto) {

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   UsePipes,
+  Session,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -28,6 +29,11 @@ export class BlogController {
   @UsePipes(new FormatDatePipe(['postAt', 'updateAt']))
   create(@Body(ValidationPipe) createBlogDto: CreateBlogDto) {
     return this.blogService.create(createBlogDto);
+  }
+
+  @Get('stat')
+  getStat(@Session() session: CustomSession) {
+    return this.blogService.getStat(session.user?.role);
   }
 
   @Post('list')

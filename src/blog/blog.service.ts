@@ -1,12 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { PrismaClient } from '@prisma/client';
 import { FetchBlogDto } from './dto/fetch-blog.dto';
+
+import { getStartOfDay, getStartOfMonth } from 'src/utils/parse';
+import { TypeService } from 'src/type/type.service';
+import { TagService } from 'src/tag/tag.service';
 
 @Injectable()
 export class BlogService {
+  private statCache = new Map<string, any>();
+
   @Inject('PrismaClient') private prisma: PrismaClient;
+
+  constructor(
+    private typeService: TypeService,
+    private tagService: TagService,
+  ) {}
 
   // 创建博客，并 关联或创建 现有的 分类或标签
   create(createBlogDto: CreateBlogDto) {
@@ -84,6 +96,95 @@ export class BlogService {
       take: fetchBlogDto.pageSize,
     });
     return { data, total };
+  }
+
+  // 获取博客统计图，别想着再动这个接口，水很深
+  async getStat(role: string) {
+    /**
+     * Shift 一样的写法，但仔细一想好像也挺河里，已知：
+     * 1. Prisma 目前没有办法对时间段做聚类操作，故不缓存每次都要 *上百次* SQL
+     * 2. 整个系统中只有我（Admin）能对博客统计的结果造成影响
+     * 3. 我（Admin）发完博客之后可能顺手查看一下当前的所有博客的统计结果
+     * 4. 此接口返回结果中数据的最小粒度是 天
+     * 故，这算是最优解：
+     * 1. 每天第一次访问此接口，正常查询，并将日期与结果存入 Cache，同时试图删除旧 Cache
+     * 2. 后面普通用户访问此接口，发现有 Cache 直接返回（几 ms 的响应时间）
+     * 3. 我（Admin）访问此接口，正常查询，更新 Cache
+     */
+    const today = getStartOfDay(0).toLocaleDateString();
+    if (role !== Role.admin && this.statCache.has(today)) {
+      return this.statCache.get(today);
+    }
+    this.statCache.delete(getStartOfDay(1).toLocaleDateString());
+
+    // 获取每个分类下博客发布情况
+    const typeRes = await this.typeService.findAll();
+    const radarOptionMax = Math.max(
+      ...typeRes.map((item) => item._count.blogs),
+    );
+
+    // 获取每个标签下博客发布情况
+    const tagRes = (await this.tagService.findAll()).sort(
+      (a, b) => b._count.blogs - a._count.blogs,
+    );
+
+    // 获取过去六个月每个月的博客发布情况
+    const postGroupByMonth = [];
+    const monthXAxis = [];
+    for (let i = 5; i >= 0; i--) {
+      const begin = getStartOfMonth(i);
+      const end = getStartOfMonth(i - 1);
+      postGroupByMonth.push(
+        this.prisma.blog.count({ where: { postAt: { gte: begin, lte: end } } }),
+      );
+      monthXAxis.push(begin.toLocaleDateString());
+    }
+    const monthValue = await Promise.all(postGroupByMonth);
+
+    // 获取过去六个月每天的博客发布情况
+    const postGroupByDay = [];
+    for (let i = 179; i >= 0; i--) {
+      const begin = getStartOfDay(i);
+      const end = getStartOfDay(i - 1);
+      postGroupByDay.push(
+        new Promise(async (resolve) => {
+          const count = await this.prisma.blog.count({
+            where: { postAt: { gte: begin, lte: end } },
+          });
+          resolve([begin.toLocaleDateString(), count]);
+        }),
+      );
+    }
+    const dayValue = await Promise.all(postGroupByDay);
+
+    // 合并接口之后就是没眼看，，
+    const res = {
+      radarOption: {
+        indicator: typeRes.map((item) => ({
+          name: item.typeName,
+          max: radarOptionMax + Math.ceil(radarOptionMax / 6),
+        })),
+        value: typeRes.map((item) => item._count.blogs),
+      },
+      lineOption: {
+        xAxis: monthXAxis.map((item: string) =>
+          item.split('/').slice(0, 2).join('-'),
+        ),
+        value: monthValue,
+      },
+      heatMapOption: dayValue,
+      pieOption: typeRes.map((item) => ({
+        value: item._count.blogs,
+        name: item.typeName,
+      })),
+      directOption: {
+        xAxis: tagRes.map((item) => item.tagName),
+        value: tagRes.map((item) => item._count.blogs),
+      },
+    };
+
+    this.statCache.set(today, res);
+    return res;
   }
 
   like(id: string) {
