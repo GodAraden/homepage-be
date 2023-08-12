@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { writeFile } from 'fs/promises';
 
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -43,6 +44,19 @@ export class BlogService {
         tags: true,
       },
     });
+  }
+
+  // 上传图像
+  async uploadImage(image: Express.Multer.File) {
+    const filenameArray = image.originalname.split('.');
+    const suffix = filenameArray.pop();
+    filenameArray.push(String(+new Date()), suffix);
+    const filename = filenameArray.join('.');
+    await writeFile(`images/${filename}`, image.buffer);
+    return {
+      filename: image.originalname,
+      url: `/image/${filename}`,
+    };
   }
 
   // 根据传入参数获取博客列表

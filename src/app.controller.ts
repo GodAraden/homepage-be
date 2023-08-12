@@ -10,10 +10,10 @@ export class AppController {
   @Get()
   getAppInfo() {
     return {
-      name: "GodAraden's Homepage-Backend",
+      name: "GodAraden's Homepage Backend",
       version: '1.0.0',
-      description:
-        "Ahh,,, this is the server's domain, You can goto http://araden.top/ and visit my homepage",
+      description: "GodAraden's Homepage URL: http://araden.top/",
+      requestAt: new Date(),
     };
   }
 
@@ -33,7 +33,7 @@ export class AppController {
     return session.user;
   }
 
-  @Post('/logout')
+  @Post('logout')
   async logout(@Session() session: CustomSession) {
     const role = session.user?.role || 'NotLogin';
     delete session.user;

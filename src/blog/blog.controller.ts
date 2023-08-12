@@ -9,6 +9,8 @@ import {
   UseGuards,
   UsePipes,
   Session,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -18,6 +20,7 @@ import { Roles } from 'src/common/permission/roles.decorator';
 import { ValidationPipe } from 'src/common/validate.pipe';
 import { FormatDatePipe } from './common/formatDate.pipe';
 import { FetchBlogDto } from './dto/fetch-blog.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(RolesGuard)
 @Controller('blog')
@@ -29,6 +32,13 @@ export class BlogController {
   @UsePipes(new FormatDatePipe(['postAt', 'updateAt']))
   create(@Body(ValidationPipe) createBlogDto: CreateBlogDto) {
     return this.blogService.create(createBlogDto);
+  }
+
+  @Post('image')
+  @Roles(Role.admin)
+  @UseInterceptors(FileInterceptor('image'))
+  uploadImage(@UploadedFile() image: Express.Multer.File) {
+    return this.blogService.uploadImage(image);
   }
 
   @Get('stat')
