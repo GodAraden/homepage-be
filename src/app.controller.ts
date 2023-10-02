@@ -11,8 +11,8 @@ export class AppController {
   getAppInfo() {
     return {
       name: "GodAraden's Homepage Backend",
-      version: '1.0.0',
-      description: "GodAraden's Homepage URL: http://araden.top/",
+      version: '1.1.0',
+      description: "GodAraden's Homepage URL: https://www.araden.top/",
       requestAt: new Date(),
     };
   }
