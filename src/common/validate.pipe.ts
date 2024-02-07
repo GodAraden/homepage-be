@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { tips } from './dictionary';
+import { tips } from '../dictionary';
 
 @Injectable()
 export class ValidationPipe<T> implements PipeTransform<T> {

@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Session } from '@nestjs/common';
-import { AppService } from './app.service';
-import { LoginDto } from './dto/login.dto';
 import { ValidationPipe } from './common/validate.pipe';
+import { LoginDto } from './dto/login.dto';
+import { AppService } from './app.service';
+import { getAppInfo } from './dictionary';
 
 @Controller()
 export class AppController {
@@ -9,12 +10,7 @@ export class AppController {
 
   @Get()
   getAppInfo() {
-    return {
-      name: "GodAraden's Homepage Backend",
-      version: '1.1.0',
-      description: "GodAraden's Homepage URL: https://www.araden.top/",
-      requestAt: new Date(),
-    };
+    return getAppInfo();
   }
 
   @Post('login')

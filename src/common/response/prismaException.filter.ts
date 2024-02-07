@@ -1,7 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Response } from 'express';
-import { tips } from '../dictionary';
+import { tips } from '../../dictionary';
 
 type PrismaError =
   | Prisma.PrismaClientValidationError
