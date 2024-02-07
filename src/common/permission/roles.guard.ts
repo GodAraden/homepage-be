@@ -2,10 +2,11 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
+  BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { tips } from '../dictionary';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -13,17 +14,17 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    if (!roles) {
-      return true;
-    }
     const request = context.switchToHttp().getRequest();
     const role = request.session.user?.role;
-    if (!role) {
-      throw new HttpException('NotLogin', HttpStatus.BAD_REQUEST);
+
+    if (!roles) {
+      return true;
+    } else if (!role) {
+      throw new BadRequestException(tips.httpExeceptions.needLogin);
+    } else if (!roles.includes(role)) {
+      throw new ForbiddenException(tips.httpExeceptions.noPermission);
     }
-    if (!role.includes(role)) {
-      throw new HttpException('NoPermission', HttpStatus.FORBIDDEN);
-    }
+
     return true;
   }
 }

@@ -6,23 +6,22 @@ import {
 } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { tips } from './dictionary';
 
 @Injectable()
-export class ValidationPipe implements PipeTransform<any> {
-  async transform(value: any, { metatype }: ArgumentMetadata) {
-    if (!metatype || !this.toValidate(metatype)) {
-      return value;
-    }
-    const object = plainToInstance(metatype, value);
-    const errors = await validate(object);
+export class ValidationPipe<T> implements PipeTransform<T> {
+  async transform(value: T, { metatype }: ArgumentMetadata) {
+    if (!metatype || !this.toValidate(metatype)) return value;
+
+    const errors = await validate(plainToInstance(metatype, value));
     if (errors.length > 0) {
-      throw new BadRequestException('ValidationFailed');
+      throw new BadRequestException(tips.httpExeceptions.validation);
     }
     return value;
   }
 
-  private toValidate(metatype: any): boolean {
+  private toValidate(metatype: unknown) {
     const types = [String, Boolean, Number, Array, Object];
-    return !types.includes(metatype);
+    return !types.some((type) => type === metatype);
   }
 }
