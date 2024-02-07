@@ -34,12 +34,7 @@ async function bootstrap() {
   app.use(LoggerMiddleware);
 
   app.enableCors({
-    origin: [
-      'http://araden.top',
-      'http://www.araden.top',
-      'https://araden.top',
-      'https://www.araden.top',
-    ],
+    origin: ['https://www.araden.top'],
     credentials: true,
   });
 
