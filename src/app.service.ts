@@ -1,10 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { config as configEnv } from 'dotenv';
 import { LoginDto } from './dto/login.dto';
 import { tips } from './dictionary';
-
-const { parsed } = configEnv({ path: '.env.pwd.local' });
-const userInfo: LoginDto = JSON.parse(parsed.USERINFO);
+import { userInfo } from './env';
 
 @Injectable()
 export class AppService {

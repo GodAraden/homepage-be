@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { writeFile } from 'fs/promises';
-import { config } from 'dotenv';
 
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -10,6 +9,7 @@ import { FetchBlogDto } from './dto/fetch-blog.dto';
 import { getStartOfDay, getStartOfMonth } from 'src/utils/parse';
 import { TypeService } from 'src/type/type.service';
 import { TagService } from 'src/tag/tag.service';
+import { xApiKey } from 'src/env';
 
 type CoverListItem = {
   breads: unknown[];
@@ -26,8 +26,6 @@ const failedImg: CoverListItem = {
   width: 474,
   height: 296,
 };
-
-const { parsed } = config({ path: '.env.key.local' });
 
 @Injectable()
 export class BlogService {
@@ -92,7 +90,7 @@ export class BlogService {
     try {
       const response = await fetch(url + '?' + params.toString(), {
         headers: {
-          'x-api-key': parsed.X_API_KEY || '',
+          'x-api-key': xApiKey || '',
         },
       });
       res = await response.json();

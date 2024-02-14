@@ -38,8 +38,8 @@ jobs:
           cp -r prisma/ package.json ${{ env.PROJECT_DIR }}/
           cd ${{ env.PROJECT_DIR }}
           echo ${{ secrets.DATABASE_ENV }} > .env
-          echo ${{ secrets.USERINFO_ENV }} > .env.pwd.local
-          echo ${{ secrets.X_API_KEY }} > .env.key.local
+          echo ${{ secrets.USERINFO_ENV }} | cat >> .env.local
+          echo ${{ secrets.X_API_KEY }} | cat >> .env.local
 
       - name: deploy
         uses: easingthemes/ssh-deploy@main # 使用 ssh 上传文件的 action 操作

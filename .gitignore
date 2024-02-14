@@ -36,4 +36,4 @@ lerna-debug.log*
 
 /images
 prisma/migrations
-.env.*.local
+.env.local
