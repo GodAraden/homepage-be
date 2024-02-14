@@ -3,7 +3,7 @@ import { config as configEnv } from 'dotenv';
 import { LoginDto } from './dto/login.dto';
 import { tips } from './dictionary';
 
-const { parsed } = configEnv({ path: '.env.local' });
+const { parsed } = configEnv({ path: '.env.pwd.local' });
 const userInfo: LoginDto = JSON.parse(parsed.USERINFO);
 
 @Injectable()

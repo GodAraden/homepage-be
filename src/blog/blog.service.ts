@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { writeFile } from 'fs/promises';
+import { config } from 'dotenv';
 
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -9,6 +10,24 @@ import { FetchBlogDto } from './dto/fetch-blog.dto';
 import { getStartOfDay, getStartOfMonth } from 'src/utils/parse';
 import { TypeService } from 'src/type/type.service';
 import { TagService } from 'src/tag/tag.service';
+
+type CoverListItem = {
+  breads: unknown[];
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+};
+
+const failedImg: CoverListItem = {
+  breads: [],
+  id: 'failed',
+  url: '/failed.jpg',
+  width: 474,
+  height: 296,
+};
+
+const { parsed } = config({ path: '.env.key.local' });
 
 @Injectable()
 export class BlogService {
@@ -57,6 +76,30 @@ export class BlogService {
       filename: image.originalname,
       url: `/image/${filename}`,
     };
+  }
+
+  async fetchCoverList(count: string) {
+    const url = 'https://api.thecatapi.com/v1/images/search';
+    const params = new URLSearchParams({
+      limit: count,
+      mime_types: 'jpg,png',
+      size: 'small',
+      has_breeds: '1',
+    });
+
+    let res: CoverListItem[];
+
+    try {
+      const response = await fetch(url + '?' + params.toString(), {
+        headers: {
+          'x-api-key': parsed.X_API_KEY || '',
+        },
+      });
+      res = await response.json();
+    } catch (err) {
+      res = new Array(Number(count)).fill(failedImg);
+    }
+    return res;
   }
 
   // 根据传入参数获取博客列表

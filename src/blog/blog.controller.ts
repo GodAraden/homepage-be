@@ -11,6 +11,7 @@ import {
   Session,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -44,6 +45,11 @@ export class BlogController {
   @Get('stat')
   getStat(@Session() session: CustomSession) {
     return this.blogService.getStat(session.user?.role);
+  }
+
+  @Get('cover')
+  fetchCoverList(@Query('count') count: string) {
+    return this.blogService.fetchCoverList(count);
   }
 
   @Post('list')

@@ -8,7 +8,7 @@
 
 # 博客系统的账号密码
 
-在项目根目录下新建 .env.local 文件，插入以下内容
+在项目根目录下新建 .env.pwd.local 文件，插入以下内容
 
 ```bash
 USERINFO={"username":"xxx","password":"xxx"}
@@ -18,4 +18,14 @@ USERINFO={"username":"xxx","password":"xxx"}
 
 ```bash
 USERINFO=\{\"username\":\"xxx\",\"password\":\"xxx\"\}
+```
+
+# 获取博客封面所需的 key
+
+本项目中博客的封面图是通过 [The Cat API](https://thecatapi.com/) 获取到的，发送请求时需在请求头中携带密钥
+
+在项目根目录下新建 .env.key.local 文件，插入以下内容
+
+```bash
+X_API_KEY=xxxxxxxxxxx
 ```
