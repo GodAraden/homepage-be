@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 import { writeFile } from 'fs/promises';
 
@@ -9,7 +10,6 @@ import { FetchBlogDto } from './dto/fetch-blog.dto';
 import { getStartOfDay, getStartOfMonth } from 'src/utils/parse';
 import { TypeService } from 'src/type/type.service';
 import { TagService } from 'src/tag/tag.service';
-import { xApiKey } from 'src/env';
 
 type CoverListItem = {
   breads: unknown[];
@@ -36,6 +36,7 @@ export class BlogService {
   constructor(
     private typeService: TypeService,
     private tagService: TagService,
+    private configService: ConfigService,
   ) {}
 
   // 创建博客，并 关联或创建 现有的 分类或标签
@@ -78,6 +79,7 @@ export class BlogService {
 
   async fetchCoverList(count: string) {
     const url = 'https://api.thecatapi.com/v1/images/search';
+    const xApiKey = this.configService.get<string>('X_API_KEY');
     const params = new URLSearchParams({
       limit: count,
       mime_types: 'jpg,png',
